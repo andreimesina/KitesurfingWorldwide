@@ -6,7 +6,7 @@ buildscript {
         // App version
         majorVersion = 0
         minorVersion = 3
-        patchVersion = 1
+        patchVersion = 2
         versionClassifier = 'alpha-1'
 
         minSdkVersion = 19
@@ -61,7 +61,7 @@ private String generateVersionName() {
         versionName += "-" + ext.versionClassifier
     }
 
-    return versionName;
+    return versionName
 }
 
 allprojects {
