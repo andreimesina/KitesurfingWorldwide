@@ -2,6 +2,7 @@ package com.andreimesina.kitesurfingworldwide.data.webservice;
 
 import com.andreimesina.kitesurfingworldwide.data.model.Profile;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
+import com.andreimesina.kitesurfingworldwide.data.model.SpotDetails;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface Api {
 
     @POST("/api-spot-get-all")
     @Headers("Content-Type: application/json")
-    Call<List<Spot>> getAllSpots(@Header("token") String token, @Body Spot s);
+    Call<List<Spot>> getAllSpots(@Header("token") String token, @Body SpotDetails spotDetails);
 
     @POST("/api-spot-get-details")
     @Headers("Content-Type: application/json")
