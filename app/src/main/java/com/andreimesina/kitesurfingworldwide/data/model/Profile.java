@@ -1,20 +1,18 @@
 package com.andreimesina.kitesurfingworldwide.data.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Profile {
 
-    private static Profile instance;
-
+    @SerializedName("token")
     private String token;
+
+    @SerializedName("email")
     private String email;
 
-    private Profile() {}
-
-    public static synchronized Profile getInstance() {
-        if(instance == null) {
-            instance = new Profile();
-        }
-
-        return instance;
+    public Profile(String email, String token) {
+        this.email = email;
+        this.token = token;
     }
 
     public String getToken() {
