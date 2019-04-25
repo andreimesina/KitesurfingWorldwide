@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Kitesurfing Worldwide</string>
+    <string name="open_navigation">Open nav</string>
+    <string name="close_navigation">Close nav</string>
 </resources>
