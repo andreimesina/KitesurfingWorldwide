@@ -1,11 +1,11 @@
 package com.andreimesina.kitesurfingworldwide.data.model;
 
-public class SpotDetails {
+public class SpotFilter {
 
     private String country;
     private int windProbability;
 
-    public SpotDetails(String country, int windProbability) {
+    public SpotFilter(String country, int windProbability) {
         this.country = country;
         this.windProbability = windProbability;
     }
