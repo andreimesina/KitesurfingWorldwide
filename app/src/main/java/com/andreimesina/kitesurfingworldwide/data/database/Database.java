@@ -8,8 +8,10 @@ import androidx.room.RoomDatabase;
 import com.andreimesina.kitesurfingworldwide.data.dao.SpotDao;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
 
-@androidx.room.Database(entities = Spot.class, version = 1)
+@androidx.room.Database(entities = Spot.class, version = Database.VERSION)
 public abstract class Database extends RoomDatabase {
+
+    public static final int VERSION = 1;
 
     private static Database instance;
     private static SpotDao spotDao;
@@ -18,8 +20,8 @@ public abstract class Database extends RoomDatabase {
 
     public static synchronized Database getInstance(Context context) {
         if(instance == null) {
-            instance = Room.databaseBuilder(context.getApplicationContext(), Database.class,
-                    "Kitesurfing_Worldwide")
+            instance = Room.databaseBuilder(context, Database.class,
+                    "KitesurfingWorldwide")
                     .fallbackToDestructiveMigration()
                     .build();
         }
