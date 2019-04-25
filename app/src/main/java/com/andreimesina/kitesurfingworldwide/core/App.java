@@ -3,7 +3,7 @@ package com.andreimesina.kitesurfingworldwide.core;
 import android.app.Application;
 
 import com.andreimesina.kitesurfingworldwide.BuildConfig;
-import com.andreimesina.kitesurfingworldwide.data.model.Profile;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import timber.log.Timber;
 
@@ -17,7 +17,8 @@ public class App extends Application {
             Timber.plant(new Timber.DebugTree());
         }
 
-        Profile.getInstance().setEmail("test@test.com");
+        AndroidThreeTen.init(this);
+
         ServiceProvider.initialize(this);
 
     }
