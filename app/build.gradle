@@ -60,6 +60,9 @@ dependencies {
     // Logging
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
+    // Dates & timestamps
+    implementation "com.jakewharton.threetenabp:threetenabp:$threeTenVersion"
+
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test:runner:$testRunnerVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
