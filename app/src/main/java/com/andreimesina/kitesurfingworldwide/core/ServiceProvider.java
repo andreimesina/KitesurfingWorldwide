@@ -9,10 +9,14 @@ public class ServiceProvider {
     private static ServiceProvider instance;
 
     private final Application app;
+
+    private final AuthenticationManager authManager;
     private final Repository repository;
 
     private ServiceProvider(Application app) {
         this.app = app;
+
+        authManager = AuthenticationManager.getInstance();
         repository = new Repository(app);
     }
 
@@ -26,6 +30,10 @@ public class ServiceProvider {
 
     public static ServiceProvider getInstance() {
         return instance;
+    }
+
+    public AuthenticationManager getAuthManager() {
+        return authManager;
     }
 
     public Repository getRepository() {
