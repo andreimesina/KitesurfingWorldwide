@@ -2,7 +2,7 @@ package com.andreimesina.kitesurfingworldwide.data.webservice;
 
 import com.andreimesina.kitesurfingworldwide.data.model.Profile;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
-import com.andreimesina.kitesurfingworldwide.data.model.SpotDetails;
+import com.andreimesina.kitesurfingworldwide.data.model.SpotFilter;
 
 import java.util.List;
 
@@ -12,29 +12,29 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
-public interface Api {
+public interface ApiService {
 
-    @POST("/api-user-get")
     @Headers("Content-Type: application/json")
+    @POST("/api-user-get")
     Call<Profile> createProfile(@Body String email);
 
+    @Headers("Content-Type: application/json")
     @POST("/api-spot-get-all")
-    @Headers("Content-Type: application/json")
-    Call<List<Spot>> getAllSpots(@Header("token") String token, @Body SpotDetails spotDetails);
+    Call<List<Spot>> getAllSpots(@Header("token") String token, @Body SpotFilter spotFilter);
 
-    @POST("/api-spot-get-details")
     @Headers("Content-Type: application/json")
+    @POST("/api-spot-get-details")
     Call<Spot> getSpotDetails(@Header("token") String token, @Body String spotId);
 
-    @POST("/api-spot-get-countries")
     @Headers("Content-Type: application/json")
+    @POST("/api-spot-get-countries")
     Call<List<String>> getAllSpotCountries(@Header("token") String token);
 
-    @POST("/api-spot-favorites-add")
     @Headers("Content-Type: application/json")
+    @POST("/api-spot-favorites-add")
     Call<Void> addSpotToFavorites(@Header("token") String token, @Body String spotId);
 
-    @POST("/api-spot-favorites-remove")
     @Headers("Content-Type: application/json")
+    @POST("/api-spot-favorites-remove")
     Call<Void> removeSpotFromFavorites(@Header("token") String token, @Body String spotId);
 }
