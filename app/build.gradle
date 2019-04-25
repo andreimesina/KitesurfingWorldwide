@@ -54,9 +54,6 @@ dependencies {
     // Serialization: GSON
     implementation "com.google.code.gson:gson:$gsonVersion"
 
-    // Image loading: Picasso
-    implementation "com.squareup.picasso:picasso:$picassoVersion"
-
     // Logging
     implementation "com.jakewharton.timber:timber:$timberVersion"
 

@@ -6,7 +6,7 @@ buildscript {
         // App version
         majorVersion = 0
         minorVersion = 3
-        patchVersion = 18
+        patchVersion = 19
         versionClassifier = 'alpha-1'
 
         minSdkVersion = 19
@@ -26,7 +26,6 @@ buildscript {
         retrofitVersion = '2.5.0'
         timberVersion = '4.7.1'
         threeTenVersion = '1.2.0'
-        picassoVersion = '2.5.2'
 
         // Test dependencies
         testRunnerVersion = '1.1.1'
