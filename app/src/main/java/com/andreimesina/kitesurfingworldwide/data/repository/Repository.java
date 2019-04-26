@@ -4,14 +4,18 @@ import android.app.Application;
 import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
-import com.andreimesina.kitesurfingworldwide.core.ServiceProvider;
+import com.andreimesina.kitesurfingworldwide.core.AuthenticationManager;
 import com.andreimesina.kitesurfingworldwide.data.dao.SpotDao;
 import com.andreimesina.kitesurfingworldwide.data.database.Database;
 import com.andreimesina.kitesurfingworldwide.data.model.Profile;
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.ProfileResponse;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
 import com.andreimesina.kitesurfingworldwide.data.model.SpotFilter;
 import com.andreimesina.kitesurfingworldwide.data.webservice.WebService;
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotDetailsResponse;
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotsResponse;
 
 import org.threeten.bp.Instant;
 import org.threeten.bp.temporal.ChronoUnit;
@@ -34,6 +38,8 @@ public class Repository {
 
     private Executor executor = Executors.newCachedThreadPool();
 
+    private MutableLiveData<Boolean> isAuthenticated;
+
     private Instant spotsSyncedAt = Instant.EPOCH;
 
     public Repository(Application application) {
@@ -45,14 +51,18 @@ public class Repository {
         dao = database.getSpotDao();
     }
 
-    public void createProfile() {
+    public MutableLiveData<Boolean> createProfile() {
+        isAuthenticated = new MutableLiveData<>();
+
         webService.createProfile()
-                .enqueue(new Callback<Profile>() {
+                .enqueue(new Callback<ProfileResponse>() {
                     @Override
-                    public void onResponse(Call<Profile> call, Response<Profile> response) {
+                    public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                         if(response.isSuccessful()) {
-                            ServiceProvider.getInstance().getAuthManager().setProfile(
-                                    response.body());
+                            Profile profile = response.body().getProfile();
+
+                            AuthenticationManager.getInstance().setProfile(profile);
+                            isAuthenticated.setValue(true);
                         } else {
                             Toast.makeText(
                                     app, "Could not authenticate.", Toast.LENGTH_SHORT)
@@ -62,11 +72,13 @@ public class Repository {
                     }
 
                     @Override
-                    public void onFailure(Call<Profile> call, Throwable t) {
+                    public void onFailure(Call<ProfileResponse> call, Throwable t) {
                         Toast.makeText(app, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         Timber.d("Authentication failed.");
                     }
                 });
+
+        return isAuthenticated;
     }
 
     private void insertAllSpots(List<Spot> spots) {
@@ -84,19 +96,19 @@ public class Repository {
         return getAllSpotsFromDb();
     }
 
-    private void syncSpots(SpotFilter spotFilter) {
-        if(spotsSyncedAt.isAfter(Instant.now().minus(10, ChronoUnit.MINUTES))) {
+    public void syncSpots(SpotFilter spotFilter) {
+        if(spotsSyncedAt.isAfter(Instant.now().minus(10, ChronoUnit.SECONDS))) {
             Timber.d("Spots have been already synced in the last 10 minutes. Skipping...");
             return ;
         }
 
         webService.getAllSpots(spotFilter)
-                .enqueue(new Callback<List<Spot>>() {
+                .enqueue(new Callback<SpotsResponse>() {
                     @Override
-                    public void onResponse(Call<List<Spot>> call, Response<List<Spot>> response) {
+                    public void onResponse(Call<SpotsResponse> call, Response<SpotsResponse> response) {
                         if(response.isSuccessful()) {
                             spotsSyncedAt = Instant.now();
-                            insertAllSpots(response.body());
+                            insertAllSpots(response.body().getSpots());
                         } else {
                             Toast.makeText(
                                     app, "Could not fetch latest spots.", Toast.LENGTH_SHORT)
@@ -106,10 +118,10 @@ public class Repository {
                     }
 
                     @Override
-                    public void onFailure(Call<List<Spot>> call, Throwable t) {
+                    public void onFailure(Call<SpotsResponse> call, Throwable t) {
                         Toast.makeText(app, "Failed to fetch latest spots", Toast.LENGTH_SHORT)
                                 .show();
-                        Timber.d("Failed to fetch latest spots.");
+                        Timber.d(t);
                     }
                 });
     }
@@ -135,18 +147,18 @@ public class Repository {
 
     private void syncSpotDetails(String spotId) {
         webService.getSpotDetails(spotId)
-                .enqueue(new Callback<Spot>() {
+                .enqueue(new Callback<SpotDetailsResponse>() {
                     @Override
-                    public void onResponse(Call<Spot> call, Response<Spot> response) {
+                    public void onResponse(Call<SpotDetailsResponse> call, Response<SpotDetailsResponse> response) {
                         if(response.isSuccessful()) {
-                            updateSpotDetails(response.body());
+                            updateSpotDetails(response.body().getSpot());
                         } else {
                             Timber.d("Could not sync spot details. spotId: %s", spotId);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Spot> call, Throwable t) {
+                    public void onFailure(Call<SpotDetailsResponse> call, Throwable t) {
                         Timber.d("Failed to sync spot details. spotId: %s", spotId);
                     }
                 });
