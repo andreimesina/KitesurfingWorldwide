@@ -11,7 +11,12 @@ public class AuthenticationManager {
     private static AuthenticationManager instance;
     private Profile profile;
 
-    private AuthenticationManager() { }
+    private AuthenticationManager() {
+        // Hotfix solution until we have a registration layout
+        // so we can get the email address from user input
+        profile = new Profile();
+        profile.setEmail("test@test.com");
+    }
 
     public static synchronized AuthenticationManager getInstance() {
         if(instance == null) {
