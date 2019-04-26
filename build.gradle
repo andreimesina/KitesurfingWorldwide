@@ -5,8 +5,8 @@ buildscript {
     ext {
         // App version
         majorVersion = 0
-        minorVersion = 3
-        patchVersion = 41
+        minorVersion = 4
+        patchVersion = 0
         versionClassifier = 'alpha-1'
 
         minSdkVersion = 19
