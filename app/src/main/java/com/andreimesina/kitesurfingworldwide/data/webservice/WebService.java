@@ -1,11 +1,15 @@
 package com.andreimesina.kitesurfingworldwide.data.webservice;
 
-import com.andreimesina.kitesurfingworldwide.core.ServiceProvider;
-import com.andreimesina.kitesurfingworldwide.data.model.Profile;
+import com.andreimesina.kitesurfingworldwide.core.AuthenticationManager;
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.ProfileResponse;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
 import com.andreimesina.kitesurfingworldwide.data.model.SpotFilter;
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotDetailsResponse;
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotsResponse;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -35,37 +39,40 @@ public class WebService {
                 .create(ApiService.class);
     }
 
-    public Call<Profile> createProfile() {
-        return api.createProfile(
-                ServiceProvider.getInstance().getAuthManager().getProfile().getEmail());
+    public Call<ProfileResponse> createProfile() {
+        Map<String, String> emailMap = new HashMap<>();
+        emailMap.put("email",
+                AuthenticationManager.getInstance().getProfile().getEmail());
+
+        return api.createProfile(emailMap);
     }
 
-    public Call<List<Spot>> getAllSpots(SpotFilter spotFilter) {
+    public Call<SpotsResponse> getAllSpots(SpotFilter spotFilter) {
         return api.getAllSpots(
-                ServiceProvider.getInstance().getAuthManager().getProfile().getToken(),
+                AuthenticationManager.getInstance().getProfile().getToken(),
                 spotFilter);
     }
 
-    public Call<Spot> getSpotDetails(String spotId) {
+    public Call<SpotDetailsResponse> getSpotDetails(String spotId) {
         return api.getSpotDetails(
-                ServiceProvider.getInstance().getAuthManager().getProfile().getToken(),
+                AuthenticationManager.getInstance().getProfile().getToken(),
                 spotId);
     }
 
     public Call<List<String>> getAllSpotCountries() {
         return api.getAllSpotCountries(
-                ServiceProvider.getInstance().getAuthManager().getProfile().getToken());
+                AuthenticationManager.getInstance().getProfile().getToken());
     }
 
     public Call<Void> addSpotToFavorites(String spotId) {
         return api.addSpotToFavorites(
-                ServiceProvider.getInstance().getAuthManager().getProfile().getToken(),
+                AuthenticationManager.getInstance().getProfile().getToken(),
                 spotId);
     }
 
     public Call<Void> removeSpotFromFavorites(String spotId) {
         return api.removeSpotFromFavorites(
-                ServiceProvider.getInstance().getAuthManager().getProfile().getToken(),
+                AuthenticationManager.getInstance().getProfile().getToken(),
                 spotId);
     }
 }
