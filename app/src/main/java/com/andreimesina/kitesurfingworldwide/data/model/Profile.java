@@ -10,6 +10,8 @@ public class Profile {
     @SerializedName("email")
     private String email;
 
+    public Profile() { }
+
     public Profile(String email, String token) {
         this.email = email;
         this.token = token;
