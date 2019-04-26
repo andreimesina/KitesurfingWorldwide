@@ -5,6 +5,8 @@ public class SpotFilter {
     private String country;
     private int windProbability;
 
+    public SpotFilter() { }
+
     public SpotFilter(String country, int windProbability) {
         this.country = country;
         this.windProbability = windProbability;
