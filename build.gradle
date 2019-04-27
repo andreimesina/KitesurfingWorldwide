@@ -6,7 +6,7 @@ buildscript {
         // App version
         majorVersion = 0
         minorVersion = 4
-        patchVersion = 2
+        patchVersion = 3
         versionClassifier = 'alpha-1'
 
         minSdkVersion = 19
