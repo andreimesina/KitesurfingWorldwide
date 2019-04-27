@@ -6,4 +6,108 @@
     android:layout_height="match_parent"
     tools:context=".activity.details.DetailsActivity">
 
+    <TextView
+        android:id="@+id/textView_country_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Country"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_countryValue_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="CountryValue"
+        app:layout_constraintStart_toStartOf="@+id/textView_country_details"
+        app:layout_constraintTop_toBottomOf="@+id/textView_country_details" />
+
+    <TextView
+        android:id="@+id/textView_latitude_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Latitude"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_countryValue_details" />
+
+    <TextView
+        android:id="@+id/textView_latitudeValue_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="LatitudeValue"
+        app:layout_constraintStart_toStartOf="@+id/textView_latitude_details"
+        app:layout_constraintTop_toBottomOf="@+id/textView_latitude_details" />
+
+    <TextView
+        android:id="@+id/textView_longitude_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Longitude"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_latitudeValue_details" />
+
+    <TextView
+        android:id="@+id/textView_longitudeValue_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="LongitudeValue"
+        app:layout_constraintStart_toStartOf="@+id/textView_longitude_details"
+        app:layout_constraintTop_toBottomOf="@+id/textView_longitude_details" />
+
+    <TextView
+        android:id="@+id/textView_windProbability_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Wind Probability"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_longitudeValue_details" />
+
+    <TextView
+        android:id="@+id/textView_windProbabilityValue_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="WindProbabilityValue"
+        app:layout_constraintStart_toStartOf="@+id/textView_windProbability_details"
+        app:layout_constraintTop_toBottomOf="@+id/textView_windProbability_details" />
+
+    <TextView
+        android:id="@+id/textView_whenToGo_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="When to Go"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_windProbabilityValue_details" />
+
+    <TextView
+        android:id="@+id/textView_whenToGoValue_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="WhenToGoValue"
+        app:layout_constraintStart_toStartOf="@+id/textView_whenToGo_details"
+        app:layout_constraintTop_toBottomOf="@+id/textView_whenToGo_details" />
 </androidx.constraintlayout.widget.ConstraintLayout>
