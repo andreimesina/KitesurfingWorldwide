@@ -23,8 +23,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility "$JavaVersion.VERSION_1_8"
+        targetCompatibility "$JavaVersion.VERSION_1_8"
     }
 }
 
@@ -32,9 +32,12 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // AndroidX
-    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.appcompat:appcompat:${androidxAppCompatVersion}"
     implementation "androidx.constraintlayout:constraintlayout:$androidxConstraintLayoutVersion"
     implementation "androidx.recyclerview:recyclerview:$androidxRecyclerViewVersion"
+
+    // Material
+    implementation "com.google.android.material:material:$googleAndroidMaterialVersion"
 
     // Architecture components - ViewModel, LiveData and Room
     implementation "androidx.lifecycle:lifecycle-viewmodel:$androidxLifecycleVersion"
@@ -42,11 +45,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$androidxLifecycleVersion"
     implementation "androidx.room:room-runtime:$androidxLifecycleVersion"
     annotationProcessor "androidx.room:room-compiler:$androidxLifecycleVersion"
+    implementation 'androidx.appcompat:appcompat:1.0.2'
 
     // Networking: OkHttp
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
-    
+
     // Networking: Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
@@ -63,4 +67,5 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test:runner:$testRunnerVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
 }
