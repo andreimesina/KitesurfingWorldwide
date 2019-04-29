@@ -17,7 +17,7 @@ public interface SpotDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllSpots(List<Spot> spots);
 
-    @Query("SELECT * FROM Spot ORDER BY id DESC")
+    @Query("SELECT * FROM Spot WHERE toDisplay = 1 ORDER BY name ASC")
     LiveData<List<Spot>> getAllSpots();
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
