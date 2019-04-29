@@ -35,6 +35,8 @@ public class Spot {
     @SerializedName("isFavorite")
     private boolean isFavorite;
 
+    private boolean toDisplay;
+
     public Spot(String id, String name, float longitude, float latitude, int windProbability,
                 String country, String whenToGo, boolean isFavorite) {
         this.id = id;
@@ -109,5 +111,13 @@ public class Spot {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public boolean isToDisplay() {
+        return toDisplay;
+    }
+
+    public void setToDisplay(boolean toDisplay) {
+        this.toDisplay = toDisplay;
     }
 }
