@@ -1,8 +1,8 @@
 package com.andreimesina.kitesurfingworldwide.data.webservice;
 
 import com.andreimesina.kitesurfingworldwide.core.AuthenticationManager;
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotIdResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.ProfileResponse;
-import com.andreimesina.kitesurfingworldwide.data.model.Spot;
 import com.andreimesina.kitesurfingworldwide.data.model.SpotFilter;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotDetailsResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotsResponse;
@@ -47,16 +47,19 @@ public class WebService {
         return api.createProfile(emailMap);
     }
 
-    public Call<SpotsResponse> getAllSpots(SpotFilter spotFilter) {
+    public Call<SpotsResponse> getAllSpots() {
         return api.getAllSpots(
                 AuthenticationManager.getInstance().getProfile().getToken(),
-                spotFilter);
+                SpotFilter.getInstance());
     }
 
     public Call<SpotDetailsResponse> getSpotDetails(String spotId) {
+        Map<String, String> idMap = new HashMap<>();
+        idMap.put("spotId", spotId);
+
         return api.getSpotDetails(
                 AuthenticationManager.getInstance().getProfile().getToken(),
-                spotId);
+                idMap);
     }
 
     public Call<List<String>> getAllSpotCountries() {
@@ -64,15 +67,21 @@ public class WebService {
                 AuthenticationManager.getInstance().getProfile().getToken());
     }
 
-    public Call<Void> addSpotToFavorites(String spotId) {
+    public Call<SpotIdResponse> addSpotToFavorites(String spotId) {
+        Map<String, String> idMap = new HashMap<>();
+        idMap.put("spotId", spotId);
+
         return api.addSpotToFavorites(
                 AuthenticationManager.getInstance().getProfile().getToken(),
-                spotId);
+                idMap);
     }
 
-    public Call<Void> removeSpotFromFavorites(String spotId) {
+    public Call<SpotIdResponse> removeSpotFromFavorites(String spotId) {
+        Map<String, String> idMap = new HashMap<>();
+        idMap.put("spotId", spotId);
+
         return api.removeSpotFromFavorites(
                 AuthenticationManager.getInstance().getProfile().getToken(),
-                spotId);
+                idMap);
     }
 }

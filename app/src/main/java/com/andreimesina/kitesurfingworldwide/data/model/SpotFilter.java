@@ -2,14 +2,19 @@ package com.andreimesina.kitesurfingworldwide.data.model;
 
 public class SpotFilter {
 
+    private static SpotFilter instance;
+
     private String country;
-    private int windProbability;
+    private String windProbability;
 
-    public SpotFilter() { }
+    private SpotFilter() { }
 
-    public SpotFilter(String country, int windProbability) {
-        this.country = country;
-        this.windProbability = windProbability;
+    public static synchronized SpotFilter getInstance() {
+        if(instance == null) {
+            instance = new SpotFilter();
+        }
+
+        return instance;
     }
 
     public String getCountry() {
@@ -20,11 +25,11 @@ public class SpotFilter {
         this.country = country;
     }
 
-    public int getWindProbability() {
+    public String getWindProbability() {
         return windProbability;
     }
 
-    public void setWindProbability(int windProbability) {
+    public void setWindProbability(String windProbability) {
         this.windProbability = windProbability;
     }
 }
