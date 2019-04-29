@@ -1,11 +1,10 @@
 package com.andreimesina.kitesurfingworldwide.activity.list;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -17,8 +16,6 @@ import com.andreimesina.kitesurfingworldwide.R;
 import com.andreimesina.kitesurfingworldwide.activity.filter.FilterActivity;
 import com.andreimesina.kitesurfingworldwide.core.BaseActivity;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
-import com.andreimesina.kitesurfingworldwide.data.model.SpotFilter;
-import com.andreimesina.kitesurfingworldwide.utils.Utils;
 
 import java.util.List;
 
@@ -56,6 +53,13 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
         viewModel = ViewModelProviders.of(this).get(ListViewModel.class);
 
+        mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary),
+                getResources().getColor(R.color.pink),
+                getResources().getColor(R.color.yellow));
+        mSwipeRefreshLayout.setRefreshing(true);
+
         /**
          * Get user token
          */
@@ -81,24 +85,8 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
          * Only calls refresh if user is already authenticated
          */
         if(isAuthenticated) {
-            mSwipeRefreshLayout.setRefreshing(true);
             onRefresh();
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        /**
-         * Initialize SwipeRefreshLayout
-         */
-        mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary),
-                getResources().getColor(R.color.pink),
-                getResources().getColor(R.color.yellow));
-        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     /**
@@ -119,7 +107,9 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                     mAdapter.updateData(spots);
                 }
 
-                mSwipeRefreshLayout.setRefreshing(false);
+                if(mSwipeRefreshLayout.isRefreshing()) {
+                    setRefreshingOff();
+                }
             }
         });
     }
@@ -144,10 +134,18 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         return super.onOptionsItemSelected(item);
     }
 
+    private void setRefreshingOff() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 1000);
+    }
+
     @Override
     public void onRefresh() {
         viewModel.syncSpots();
-        mSwipeRefreshLayout.setRefreshing(false);
     }
-
 }
