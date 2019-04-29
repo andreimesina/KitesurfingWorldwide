@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.details.DetailsActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/Widget.AppCompat.PopupMenu.Overflow" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
         android:id="@+id/textView_country_details"
@@ -13,17 +31,18 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Country"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <TextView
         android:id="@+id/textView_countryValue_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="CountryValue"
+        android:text="Country"
         app:layout_constraintStart_toStartOf="@+id/textView_country_details"
         app:layout_constraintTop_toBottomOf="@+id/textView_country_details" />
 
@@ -34,6 +53,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="Latitude"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="LatitudeValue"
+        android:text="0.00"
         app:layout_constraintStart_toStartOf="@+id/textView_latitude_details"
         app:layout_constraintTop_toBottomOf="@+id/textView_latitude_details" />
 
@@ -55,6 +75,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="Longitude"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="LongitudeValue"
+        android:text="0.00"
         app:layout_constraintStart_toStartOf="@+id/textView_longitude_details"
         app:layout_constraintTop_toBottomOf="@+id/textView_longitude_details" />
 
@@ -76,6 +97,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="Wind Probability"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +108,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="WindProbabilityValue"
+        android:text="0.0%"
         app:layout_constraintStart_toStartOf="@+id/textView_windProbability_details"
         app:layout_constraintTop_toBottomOf="@+id/textView_windProbability_details" />
 
@@ -97,6 +119,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="When to Go"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="WhenToGoValue"
+        android:text="Loading"
         app:layout_constraintStart_toStartOf="@+id/textView_whenToGo_details"
         app:layout_constraintTop_toBottomOf="@+id/textView_whenToGo_details" />
 </androidx.constraintlayout.widget.ConstraintLayout>
