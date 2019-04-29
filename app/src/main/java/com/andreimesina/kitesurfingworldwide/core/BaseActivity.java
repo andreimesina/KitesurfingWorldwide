@@ -1,42 +1,19 @@
 package com.andreimesina.kitesurfingworldwide.core;
 
-import android.os.Bundle;
-import android.view.MenuItem;
-
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import com.andreimesina.kitesurfingworldwide.R;
+import androidx.appcompat.widget.Toolbar;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private Toolbar toolbar;
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        // sync navigation icon state
-        mDrawerToggle.syncState();
+    protected void initToolbar(int id) {
+        toolbar = findViewById(id);
+        setSupportActionBar(toolbar);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(mDrawerToggle.isDrawerIndicatorEnabled() == false) {
-            onBackPressed();
-            return false;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    protected abstract void initDrawerLayout();
-
-    private void setBackArrowToolbar() {
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.string.open_navigation, R.string.close_navigation);
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
-        mDrawerToggle.setDrawerIndicatorEnabled(false);
+    protected void setBackButtonToolbar() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 }
