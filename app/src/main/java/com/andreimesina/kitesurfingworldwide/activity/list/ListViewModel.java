@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.andreimesina.kitesurfingworldwide.core.ServiceProvider;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
-import com.andreimesina.kitesurfingworldwide.data.model.SpotFilter;
 import com.andreimesina.kitesurfingworldwide.data.repository.Repository;
 
 import java.util.List;
@@ -23,11 +22,10 @@ public class ListViewModel extends ViewModel {
     }
 
     public void syncSpots() {
-        repository.syncSpots(new SpotFilter());
+        repository.syncSpots();
     }
 
     public LiveData<List<Spot>> getSpots() {
-        return repository.getAllSpots(new SpotFilter());
+        return repository.getAllSpots();
     }
-
 }
