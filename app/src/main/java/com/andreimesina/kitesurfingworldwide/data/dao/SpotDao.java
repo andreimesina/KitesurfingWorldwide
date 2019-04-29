@@ -20,6 +20,9 @@ public interface SpotDao {
     @Query("SELECT * FROM Spot WHERE toDisplay = 1 ORDER BY name ASC")
     LiveData<List<Spot>> getAllSpots();
 
+    @Query("UPDATE Spot SET toDisplay = 0")
+    void invalidateAllSpots();
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateSpotDetails(Spot spot);
 
