@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.andreimesina.kitesurfingworldwide.data.dao.SpotDao;
+import com.andreimesina.kitesurfingworldwide.data.database.dao.SpotDao;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
 
 @androidx.room.Database(entities = Spot.class, version = Database.VERSION)

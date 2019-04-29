@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.andreimesina.kitesurfingworldwide.core.AuthenticationManager;
-import com.andreimesina.kitesurfingworldwide.data.dao.SpotDao;
+import com.andreimesina.kitesurfingworldwide.data.database.dao.SpotDao;
 import com.andreimesina.kitesurfingworldwide.data.database.Database;
 import com.andreimesina.kitesurfingworldwide.data.model.Profile;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;

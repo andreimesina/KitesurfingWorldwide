@@ -1,4 +1,4 @@
-package com.andreimesina.kitesurfingworldwide.data.dao;
+package com.andreimesina.kitesurfingworldwide.data.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
