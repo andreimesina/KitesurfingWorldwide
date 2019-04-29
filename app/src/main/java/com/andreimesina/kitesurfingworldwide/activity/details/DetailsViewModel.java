@@ -4,10 +4,24 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
-public class DetailsViewModel extends AndroidViewModel {
+import com.andreimesina.kitesurfingworldwide.core.ServiceProvider;
+import com.andreimesina.kitesurfingworldwide.data.model.Spot;
+import com.andreimesina.kitesurfingworldwide.data.repository.Repository;
 
-    public DetailsViewModel(@NonNull Application application) {
-        super(application);
+import timber.log.Timber;
+
+public class DetailsViewModel extends ViewModel {
+
+    private Repository repository = ServiceProvider.getInstance().getRepository();
+
+    public DetailsViewModel() {
+        Timber.d("Started DetailsViewModel");
+    }
+
+    public LiveData<Spot> getSpotDetails(String spotId) {
+        return repository.getSpotDetails(spotId);
     }
 }
