@@ -10,15 +10,14 @@ import com.andreimesina.kitesurfingworldwide.core.AuthenticationManager;
 import com.andreimesina.kitesurfingworldwide.data.dao.SpotDao;
 import com.andreimesina.kitesurfingworldwide.data.database.Database;
 import com.andreimesina.kitesurfingworldwide.data.model.Profile;
-import com.andreimesina.kitesurfingworldwide.data.webservice.response.ProfileResponse;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
-import com.andreimesina.kitesurfingworldwide.data.model.SpotFilter;
 import com.andreimesina.kitesurfingworldwide.data.webservice.WebService;
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.ProfileResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotDetailsResponse;
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotIdResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotsResponse;
 
 import org.threeten.bp.Instant;
-import org.threeten.bp.temporal.ChronoUnit;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -85,24 +84,30 @@ public class Repository {
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                dao.invalidateAllSpots();
+
+                for(Spot spot : spots) {
+                    spot.setToDisplay(true);
+                }
                 dao.insertAllSpots(spots);
             }
         });
     }
 
-    public LiveData<List<Spot>> getAllSpots(SpotFilter spotFilter) {
-        syncSpots(spotFilter);
+    public LiveData<List<Spot>> getAllSpots() {
+        syncSpots();
 
         return getAllSpotsFromDb();
     }
 
-    public void syncSpots(SpotFilter spotFilter) {
-        if(spotsSyncedAt.isAfter(Instant.now().minus(10, ChronoUnit.SECONDS))) {
-            Timber.d("Spots have been already synced in the last 10 minutes. Skipping...");
+    public void syncSpots() {
+        /*if(spotsSyncedAt.isAfter(Instant.now().minus(10, ChronoUnit.SECONDS))) {
+            Timber.d("Spots have been already synced in the last 10 seconds. Skipping...");
+            Toast.makeText(app, "Last sync less than 10 secs ago", Toast.LENGTH_SHORT).show();
             return ;
-        }
+        }*/
 
-        webService.getAllSpots(spotFilter)
+        webService.getAllSpots()
                 .enqueue(new Callback<SpotsResponse>() {
                     @Override
                     public void onResponse(Call<SpotsResponse> call, Response<SpotsResponse> response) {
@@ -134,6 +139,7 @@ public class Repository {
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                spot.setToDisplay(true);
                 dao.updateSpotDetails(spot);
             }
         });
@@ -170,9 +176,9 @@ public class Repository {
 
     public void addSpotToFavorites(String spotId) {
         webService.addSpotToFavorites(spotId)
-                .enqueue(new Callback<Void>() {
+                .enqueue(new Callback<SpotIdResponse>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(Call<SpotIdResponse> call, Response<SpotIdResponse> response) {
                         if(response.isSuccessful()) {
                             Toast.makeText(app, "Added to favorites", Toast.LENGTH_SHORT).show();
                             addSpotToFavoritesDb(spotId);
@@ -184,7 +190,7 @@ public class Repository {
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(Call<SpotIdResponse> call, Throwable t) {
                         Toast.makeText(app, "Failed to add to favorites", Toast.LENGTH_SHORT)
                                 .show();
                         Timber.d("Failed to add to favorites. spotId: %s", spotId);
@@ -203,9 +209,9 @@ public class Repository {
 
     public void removeSpotFromFavorites(String spotId) {
         webService.removeSpotFromFavorites(spotId)
-                .enqueue(new Callback<Void>() {
+                .enqueue(new Callback<SpotIdResponse>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(Call<SpotIdResponse> call, Response<SpotIdResponse> response) {
                         if(response.isSuccessful()) {
                             Toast.makeText(app, "Removed from favorites", Toast.LENGTH_SHORT)
                                     .show();
@@ -219,7 +225,7 @@ public class Repository {
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(Call<SpotIdResponse> call, Throwable t) {
                         Toast.makeText(app, "Failed to remove from favorites",
                                 Toast.LENGTH_SHORT).show();
                         Timber.d("Failed to remove from favorites. spotId: %s", spotId);
