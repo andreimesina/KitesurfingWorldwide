@@ -1,7 +1,7 @@
 package com.andreimesina.kitesurfingworldwide.data.webservice;
 
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotIdResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.ProfileResponse;
-import com.andreimesina.kitesurfingworldwide.data.model.Spot;
 import com.andreimesina.kitesurfingworldwide.data.model.SpotFilter;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotDetailsResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotsResponse;
@@ -23,11 +23,13 @@ public interface ApiService {
 
     @Headers("Content-Type: application/json")
     @POST("/api-spot-get-all")
-    Call<SpotsResponse> getAllSpots(@Header("token") String token, @Body SpotFilter spotFilter);
+    Call<SpotsResponse> getAllSpots(@Header("token") String token,
+                                    @Body SpotFilter spotFilter);
 
     @Headers("Content-Type: application/json")
     @POST("/api-spot-get-details")
-    Call<SpotDetailsResponse> getSpotDetails(@Header("token") String token, @Body String spotId);
+    Call<SpotDetailsResponse> getSpotDetails(@Header("token") String token,
+                                             @Body Map<String, String> spotId);
 
     @Headers("Content-Type: application/json")
     @POST("/api-spot-get-countries")
@@ -35,9 +37,11 @@ public interface ApiService {
 
     @Headers("Content-Type: application/json")
     @POST("/api-spot-favorites-add")
-    Call<Void> addSpotToFavorites(@Header("token") String token, @Body String spotId);
+    Call<SpotIdResponse> addSpotToFavorites(@Header("token") String token,
+                                            @Body Map<String, String> spotId);
 
     @Headers("Content-Type: application/json")
     @POST("/api-spot-favorites-remove")
-    Call<Void> removeSpotFromFavorites(@Header("token") String token, @Body String spotId);
+    Call<SpotIdResponse> removeSpotFromFavorites(@Header("token") String token,
+                                                 @Body Map<String, String> spotId);
 }
