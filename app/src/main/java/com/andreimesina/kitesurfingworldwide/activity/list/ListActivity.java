@@ -95,6 +95,13 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Utils.setBoolean(this, "authenticated", false);
+    }
+
     /**
      * Starts observing on the Spots list.
      * Initializes the RecyclerView adapter if needed
