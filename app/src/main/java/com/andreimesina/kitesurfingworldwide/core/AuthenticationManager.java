@@ -1,6 +1,9 @@
 package com.andreimesina.kitesurfingworldwide.core;
 
+import android.content.Context;
+
 import com.andreimesina.kitesurfingworldwide.data.model.Profile;
+import com.andreimesina.kitesurfingworldwide.utils.Utils;
 
 /**
  * Used in order to hold a consistent Profile throughout the whole application
@@ -8,21 +11,37 @@ import com.andreimesina.kitesurfingworldwide.data.model.Profile;
  */
 public class AuthenticationManager {
 
+    private Context mContext;
+
     private static AuthenticationManager instance;
     private Profile profile;
 
-    private AuthenticationManager() {
+    private boolean isAuthenticated;
+
+    private AuthenticationManager(Context context) {
+        mContext = context;
         // Hotfix solution until we have a registration layout
         // so we can get the email address from user input
+        String email = Utils.getString(mContext, "email");
+        isAuthenticated = Utils.getBoolean(mContext, "authenticated");
+
         profile = new Profile();
-        profile.setEmail("test@test.com");
+        if(isAuthenticated && email.length() > 0) {
+            profile.setEmail(email);
+        } else {
+            profile.setEmail("test@test.com");
+        }
+    }
+
+    public static AuthenticationManager initialize(Context context) {
+        if(instance == null) {
+            instance = new AuthenticationManager(context);
+        }
+
+        return instance;
     }
 
     public static synchronized AuthenticationManager getInstance() {
-        if(instance == null) {
-            instance = new AuthenticationManager();
-        }
-
         return instance;
     }
 
@@ -32,5 +51,13 @@ public class AuthenticationManager {
 
     public synchronized void setProfile(Profile profile) {
         this.profile = profile;
+    }
+
+    public boolean isAuthenticated() {
+        return isAuthenticated;
+    }
+
+    public void setAuthenticated(boolean authenticated) {
+        isAuthenticated = authenticated;
     }
 }

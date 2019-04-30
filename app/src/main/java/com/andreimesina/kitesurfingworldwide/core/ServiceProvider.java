@@ -16,7 +16,7 @@ public class ServiceProvider {
     private ServiceProvider(Application app) {
         this.app = app;
 
-        authManager = AuthenticationManager.getInstance();
+        authManager = AuthenticationManager.initialize(app);
         repository = new Repository(app);
     }
 
