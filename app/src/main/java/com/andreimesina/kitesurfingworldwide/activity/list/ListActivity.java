@@ -65,21 +65,17 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         /**
          * Authenticate
          */
-        if(AuthenticationManager.getInstance().isAuthenticated() == false) {
-            viewModel.createProfile().observe(this, new Observer<Boolean>() {
-                @Override
-                public void onChanged(Boolean changed) {
-                    if(isAuthenticated == false) {
-                        isAuthenticated = changed;
-                        observeOnDataChanged();
-                    }
-
+        
+        viewModel.createProfile().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean changed) {
+                if(isAuthenticated == false) {
+                    isAuthenticated = changed;
+                    observeOnDataChanged();
                 }
-            });
-        } else {
-            isAuthenticated = true;
-            observeOnDataChanged();
-        }
+
+            }
+        });
 
     }
 
