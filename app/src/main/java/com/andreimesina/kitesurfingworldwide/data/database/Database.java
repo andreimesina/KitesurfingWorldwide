@@ -7,11 +7,12 @@ import androidx.room.RoomDatabase;
 
 import com.andreimesina.kitesurfingworldwide.data.database.dao.SpotDao;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
+import com.andreimesina.kitesurfingworldwide.data.model.SpotDetails;
 
-@androidx.room.Database(entities = Spot.class, version = Database.VERSION)
+@androidx.room.Database(entities = {Spot.class, SpotDetails.class}, version = Database.VERSION)
 public abstract class Database extends RoomDatabase {
 
-    public static final int VERSION = 3;
+    public static final int VERSION = 4;
 
     private static Database instance;
     private static SpotDao spotDao;

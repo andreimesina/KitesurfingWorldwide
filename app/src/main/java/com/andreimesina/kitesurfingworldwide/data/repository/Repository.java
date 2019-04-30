@@ -11,13 +11,16 @@ import com.andreimesina.kitesurfingworldwide.data.database.dao.SpotDao;
 import com.andreimesina.kitesurfingworldwide.data.database.Database;
 import com.andreimesina.kitesurfingworldwide.data.model.Profile;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
+import com.andreimesina.kitesurfingworldwide.data.model.SpotDetails;
 import com.andreimesina.kitesurfingworldwide.data.webservice.WebService;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.ProfileResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotDetailsResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotIdResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotsResponse;
+import com.andreimesina.kitesurfingworldwide.utils.Utils;
 
 import org.threeten.bp.Instant;
+import org.threeten.bp.temporal.ChronoUnit;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -61,6 +64,8 @@ public class Repository {
                             Profile profile = response.body().getProfile();
 
                             AuthenticationManager.getInstance().setProfile(profile);
+                            Utils.setString(app, "email", profile.getEmail());
+                            Utils.setString(app, "token", profile.getToken());
                             isAuthenticated.setValue(true);
                         } else {
                             Toast.makeText(
@@ -101,11 +106,11 @@ public class Repository {
     }
 
     public void syncSpots() {
-        /*if(spotsSyncedAt.isAfter(Instant.now().minus(10, ChronoUnit.SECONDS))) {
-            Timber.d("Spots have been already synced in the last 10 seconds. Skipping...");
-            Toast.makeText(app, "Last sync less than 10 secs ago", Toast.LENGTH_SHORT).show();
+        if(spotsSyncedAt.isAfter(Instant.now().minus(3, ChronoUnit.SECONDS))) {
+            Timber.d("Spots have been already synced in the last 3 seconds. Skipping...");
+//            Toast.makeText(app, "Last sync less than 3 secs ago", Toast.LENGTH_SHORT).show();
             return ;
-        }*/
+        }
 
         webService.getAllSpots()
                 .enqueue(new Callback<SpotsResponse>() {
@@ -135,18 +140,24 @@ public class Repository {
         return dao.getAllSpots();
     }
 
-    private void updateSpotDetails(Spot spot) {
+    private void insertSpotDetails(SpotDetails spotDetails) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                spot.setToDisplay(true);
-                dao.updateSpotDetails(spot);
+                long insertId = dao.insertSpotDetails(spotDetails);
+                Timber.d("************ INSERT ID: " + insertId + " **************");
             }
         });
     }
 
-    public LiveData<Spot> getSpotDetails(String spotId) {
-        syncSpotDetails(spotId);
+    public LiveData<SpotDetails> getSpotDetails(String spotId) {
+        LiveData<SpotDetails> spotDetails = getSpotDetailsFromDb(spotId);
+
+        if(spotDetails.getValue() != null) {
+            return spotDetails;
+        } else {
+            syncSpotDetails(spotId);
+        }
 
         return getSpotDetailsFromDb(spotId);
     }
@@ -157,7 +168,7 @@ public class Repository {
                     @Override
                     public void onResponse(Call<SpotDetailsResponse> call, Response<SpotDetailsResponse> response) {
                         if(response.isSuccessful()) {
-                            updateSpotDetails(response.body().getSpot());
+                            insertSpotDetails(response.body().getSpotDetails());
                         } else {
                             Timber.d("Could not sync spot details. spotId: %s", spotId);
                         }
@@ -170,7 +181,13 @@ public class Repository {
                 });
     }
 
-    private LiveData<Spot> getSpotDetailsFromDb(String spotId) {
+    public void syncAllSpotDetails(List<Spot> spots) {
+        for(Spot spot : spots) {
+            syncSpotDetails(spot.getId());
+        }
+    }
+
+    private LiveData<SpotDetails> getSpotDetailsFromDb(String spotId) {
         return dao.getSpotDetails(spotId);
     }
 

@@ -7,18 +7,30 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
-@Entity(tableName = "Spot")
-public class Spot {
+@Entity(tableName = "SpotDetails")
+public class SpotDetails {
 
     @SerializedName("id")
     @NonNull
-    @ColumnInfo(name = "id", index = true)
+    @ColumnInfo(name = "spotId", index = true)
     @PrimaryKey(autoGenerate = false)
-    private String id;
+    private String spotId;
 
     @SerializedName("name")
     @ColumnInfo(name = "name")
     private String name;
+
+    @SerializedName("longitude")
+    @ColumnInfo(name = "longitude")
+    private float longitude;
+
+    @SerializedName("latitude")
+    @ColumnInfo(name = "latitude")
+    private float latitude;
+
+    @SerializedName("windProbability")
+    @ColumnInfo(name = "windProbability")
+    private int windProbability;
 
     @SerializedName("country")
     @ColumnInfo(name = "country")
@@ -32,24 +44,25 @@ public class Spot {
     @ColumnInfo(name = "isFavorite")
     private boolean isFavorite;
 
-    @ColumnInfo(name = "toDisplay")
-    private boolean toDisplay;
-
-    public Spot(String id, String name, String country, String whenToGo, boolean isFavorite) {
-        this.id = id;
+    public SpotDetails(String spotId, String name, float longitude, float latitude, int windProbability,
+                String country, String whenToGo, boolean isFavorite) {
+        this.spotId = spotId;
         this.name = name;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.windProbability = windProbability;
         this.country = country;
         this.whenToGo = whenToGo;
         this.isFavorite = isFavorite;
     }
 
     @NonNull
-    public String getId() {
-        return id;
+    public String getSpotId() {
+        return spotId;
     }
 
-    public void setId(@NonNull String id) {
-        this.id = id;
+    public void setSpotId(@NonNull String spotId) {
+        this.spotId = spotId;
     }
 
     public String getName() {
@@ -58,6 +71,30 @@ public class Spot {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
+    }
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
+    }
+
+    public int getWindProbability() {
+        return windProbability;
+    }
+
+    public void setWindProbability(int windProbability) {
+        this.windProbability = windProbability;
     }
 
     public String getCountry() {
@@ -84,11 +121,4 @@ public class Spot {
         isFavorite = favorite;
     }
 
-    public boolean isToDisplay() {
-        return toDisplay;
-    }
-
-    public void setToDisplay(boolean toDisplay) {
-        this.toDisplay = toDisplay;
-    }
 }

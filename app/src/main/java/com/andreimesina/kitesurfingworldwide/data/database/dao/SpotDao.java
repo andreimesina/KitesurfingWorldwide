@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
+import com.andreimesina.kitesurfingworldwide.data.model.SpotDetails;
 
 import java.util.List;
 
@@ -23,11 +24,11 @@ public interface SpotDao {
     @Query("UPDATE Spot SET toDisplay = 0")
     void invalidateAllSpots();
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateSpotDetails(Spot spot);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insertSpotDetails(SpotDetails spotDetails);
 
-    @Query("SELECT * FROM Spot WHERE id = :spotId")
-    LiveData<Spot> getSpotDetails(String spotId);
+    @Query("SELECT * FROM SpotDetails WHERE spotId = :spotId")
+    LiveData<SpotDetails> getSpotDetails(String spotId);
 
     @Query("UPDATE Spot SET isFavorite = 1 WHERE id = :spotId")
     void addSpotToFavorites(String spotId);

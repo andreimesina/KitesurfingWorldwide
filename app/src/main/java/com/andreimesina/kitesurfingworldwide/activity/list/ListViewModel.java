@@ -14,8 +14,7 @@ public class ListViewModel extends ViewModel {
 
     private Repository repository = ServiceProvider.getInstance().getRepository();
 
-    public ListViewModel() {
-    }
+    public ListViewModel() { }
 
     public MutableLiveData<Boolean> createProfile() {
         return repository.createProfile();
@@ -23,6 +22,10 @@ public class ListViewModel extends ViewModel {
 
     public void syncSpots() {
         repository.syncSpots();
+    }
+
+    public void syncAllSpotsDetails(List<Spot> spots) {
+        repository.syncAllSpotDetails(spots);
     }
 
     public LiveData<List<Spot>> getSpots() {

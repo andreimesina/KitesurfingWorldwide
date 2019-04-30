@@ -14,6 +14,7 @@ import com.andreimesina.kitesurfingworldwide.R;
 import com.andreimesina.kitesurfingworldwide.core.BaseActivity;
 import com.andreimesina.kitesurfingworldwide.core.ServiceProvider;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
+import com.andreimesina.kitesurfingworldwide.data.model.SpotDetails;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,7 +38,7 @@ public class DetailsActivity extends BaseActivity implements OnMapReadyCallback 
 
     private GoogleMap mGoogleMap;
 
-    private Spot mSpot;
+    private SpotDetails mSpotDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +53,14 @@ public class DetailsActivity extends BaseActivity implements OnMapReadyCallback 
             initViews();
 
             viewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
-            viewModel.getSpotDetails(spotId).observe(this, new Observer<Spot>() {
+            viewModel.getSpotDetails(spotId).observe(this, new Observer<SpotDetails>() {
                 @Override
-                public void onChanged(Spot spot) {
-                    if(spot != null) {
-                        mSpot = spot;
-                        updateFields(mSpot);
+                public void onChanged(SpotDetails spotDetails) {
+                    if(spotDetails != null) {
+                        mSpotDetails = spotDetails;
+                        updateFields(mSpotDetails);
 
-                        if(mSpot.getLatitude() != 0 || mSpot.getLongitude() != 0) {
+                        if(mSpotDetails.getLatitude() != 0 || mSpotDetails.getLongitude() != 0) {
                             mapFragment.getMapAsync(DetailsActivity.this);
                         }
                     }
@@ -89,19 +90,20 @@ public class DetailsActivity extends BaseActivity implements OnMapReadyCallback 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     }
 
-    private void updateFields(Spot spot) {
-        setTitle(spot.getName());
+    private void updateFields(SpotDetails spotDetails) {
+        setTitle(spotDetails.getName());
 
-        mTextViewCountry.setText(spot.getCountry());
-        mTextViewLatitude.setText(String.valueOf(spot.getLatitude()));
-        mTextViewLongitude.setText(String.valueOf(spot.getLongitude()));
-        mTextViewWindProbability.setText(String.valueOf(spot.getWindProbability()) + "%");
-        mTextViewWhenToGo.setText(spot.getWhenToGo());
+        mTextViewCountry.setText(spotDetails.getCountry());
+        mTextViewLatitude.setText(String.valueOf(spotDetails.getLatitude()));
+        mTextViewLongitude.setText(String.valueOf(spotDetails.getLongitude()));
+        mTextViewWindProbability.setText(spotDetails.getWindProbability() + "%");
+        mTextViewWhenToGo.setText(spotDetails.getWhenToGo());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(mSpot.isFavorite()) {
+
+        if(mSpotDetails.isFavorite()) {
             getMenuInflater().inflate(R.menu.toolbar_favorite_on, menu);
         } else {
             getMenuInflater().inflate(R.menu.toolbar_favorite_off, menu);
@@ -112,22 +114,21 @@ public class DetailsActivity extends BaseActivity implements OnMapReadyCallback 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
-        if(mSpot.getId() == null || mSpot.getId().length() == 0) {
+        if(mSpotDetails.getSpotId() == null || mSpotDetails.getSpotId().length() == 0) {
             return false;
         }
 
-        if(id == R.id.action_favorite_off) {
+        if(item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        } else if(mSpotDetails.isFavorite() == false) {
             item.setIcon(R.drawable.star_on);
             Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
-            ServiceProvider.getInstance().getRepository().addSpotToFavorites(mSpot.getId());
-        } else if(id == R.id.action_favorite_on) {
+            ServiceProvider.getInstance().getRepository().addSpotToFavorites(mSpotDetails.getSpotId());
+        } else if(mSpotDetails.isFavorite() == true) {
             item.setIcon(R.drawable.star_off_details);
             Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
-            ServiceProvider.getInstance().getRepository().removeSpotFromFavorites(mSpot.getId());
-        } else {
-            onBackPressed();
+            ServiceProvider.getInstance().getRepository().removeSpotFromFavorites(mSpotDetails.getSpotId());
         }
 
         return super.onOptionsItemSelected(item);
@@ -143,9 +144,9 @@ public class DetailsActivity extends BaseActivity implements OnMapReadyCallback 
         mGoogleMap = googleMap;
 
         // Add a marker and move the camera
-        Timber.d("onMapReady: " + mSpot.getLatitude() + " : " + mSpot.getLongitude());
-        LatLng spotGeo = new LatLng(mSpot.getLatitude(), mSpot.getLongitude());
-        mGoogleMap.addMarker(new MarkerOptions().position(spotGeo).title(mSpot.getName()));
+        Timber.d("onMapReady: " + mSpotDetails.getLatitude() + " : " + mSpotDetails.getLongitude());
+        LatLng spotGeo = new LatLng(mSpotDetails.getLatitude(), mSpotDetails.getLongitude());
+        mGoogleMap.addMarker(new MarkerOptions().position(spotGeo).title(mSpotDetails.getName()));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(spotGeo));
     }
 }

@@ -14,8 +14,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.andreimesina.kitesurfingworldwide.R;
 import com.andreimesina.kitesurfingworldwide.activity.filter.FilterActivity;
+import com.andreimesina.kitesurfingworldwide.core.AuthenticationManager;
 import com.andreimesina.kitesurfingworldwide.core.BaseActivity;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
+import com.andreimesina.kitesurfingworldwide.utils.Utils;
 
 import java.util.List;
 
@@ -92,18 +94,23 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     /**
      * Starts observing on the Spots list.
      * Initializes the RecyclerView adapter if needed
+     * and syncs all spots details for offline availability
      */
     private void observeOnDataChanged() {
         viewModel.getSpots().observe(this, new Observer<List<Spot>>() {
             @Override
             public void onChanged(List<Spot> spots) {
-                if(isAdapterInitiated == false) {
+                if(mSwipeRefreshLayout.isRefreshing() == false) {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                }
+
+                if(spots.size() > 0 && isAdapterInitiated == false) {
                     mAdapter = new SpotAdapter(ListActivity.this, spots);
                     mRecyclerView.setAdapter(mAdapter);
-
                     isAdapterInitiated = true;
-                } else {
-                    mSwipeRefreshLayout.setRefreshing(true);
+
+                    viewModel.syncAllSpotsDetails(spots);
+                } else if(spots.size() > 0){
                     mAdapter.updateData(spots);
                 }
 

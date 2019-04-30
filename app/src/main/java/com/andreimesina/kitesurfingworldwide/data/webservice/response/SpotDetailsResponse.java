@@ -1,18 +1,18 @@
 package com.andreimesina.kitesurfingworldwide.data.webservice.response;
 
-import com.andreimesina.kitesurfingworldwide.data.model.Spot;
+import com.andreimesina.kitesurfingworldwide.data.model.SpotDetails;
 import com.google.gson.annotations.SerializedName;
 
 public class SpotDetailsResponse {
 
     @SerializedName("result")
-    private Spot spot;
+    private SpotDetails spotDetails;
 
-    public Spot getSpot() {
-        return spot;
+    public SpotDetails getSpotDetails() {
+        return spotDetails;
     }
 
-    public void setSpot(Spot spot) {
-        this.spot = spot;
+    public void setSpotDetails(SpotDetails spotDetails) {
+        this.spotDetails = spotDetails;
     }
 }
