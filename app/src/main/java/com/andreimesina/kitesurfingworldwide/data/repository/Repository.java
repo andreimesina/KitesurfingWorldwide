@@ -65,7 +65,7 @@ public class Repository {
 
                             AuthenticationManager.getInstance().setProfile(profile);
                             Utils.setString(app, "email", profile.getEmail());
-                            Utils.setString(app, "token", profile.getToken());
+                            Utils.setBoolean(app, "authenticated", true);
                             isAuthenticated.setValue(true);
                         } else {
                             Toast.makeText(

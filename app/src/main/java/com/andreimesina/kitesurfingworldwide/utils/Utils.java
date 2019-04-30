@@ -50,4 +50,20 @@ public class Utils {
         editor.putFloat(key, value);
         editor.apply();
     }
+
+    // save a boolean value by key
+    public static void setBoolean(Context ctx, String key, boolean value) {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(Utils.APP_KEY,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    // get a boolean value by key
+    public static boolean getBoolean(Context ctx, String key) {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(Utils.APP_KEY,
+                Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(key, false);
+    }
 }
