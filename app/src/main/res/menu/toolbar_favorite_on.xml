@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/action_favorite_on"
-        android:title="Filter"
+        android:title="Favorite on"
         android:icon="@drawable/star_on"
         app:showAsAction="always" />
 
