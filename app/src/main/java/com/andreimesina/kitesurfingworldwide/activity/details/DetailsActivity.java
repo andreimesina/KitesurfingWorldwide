@@ -28,6 +28,8 @@ public class DetailsActivity extends BaseActivity implements OnMapReadyCallback 
 
     private DetailsViewModel viewModel;
 
+    private Menu mMenu;
+
     private TextView mTextViewCountry;
     private TextView mTextViewLatitude;
     private TextView mTextViewLongitude;
@@ -102,12 +104,13 @@ public class DetailsActivity extends BaseActivity implements OnMapReadyCallback 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         if(mSpotDetails.isFavorite()) {
             getMenuInflater().inflate(R.menu.toolbar_favorite_on, menu);
         } else {
             getMenuInflater().inflate(R.menu.toolbar_favorite_off, menu);
         }
+
+        mMenu = menu;
 
         return true;
     }
@@ -121,12 +124,14 @@ public class DetailsActivity extends BaseActivity implements OnMapReadyCallback 
 
         if(item.getItemId() == android.R.id.home) {
             onBackPressed();
-        } else if(mSpotDetails.isFavorite() == false) {
-            item.setIcon(R.drawable.star_on);
+        } else if(mMenu.getItem(0).getTitle().equals("Favorite off")) {
+            mMenu.clear();
+            getMenuInflater().inflate(R.menu.toolbar_favorite_on, mMenu);
             Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
             ServiceProvider.getInstance().getRepository().addSpotToFavorites(mSpotDetails.getSpotId());
-        } else if(mSpotDetails.isFavorite() == true) {
-            item.setIcon(R.drawable.star_off_details);
+        } else if(mMenu.getItem(0).getTitle().equals("Favorite on")) {
+            mMenu.clear();
+            getMenuInflater().inflate(R.menu.toolbar_favorite_off, mMenu);
             Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
             ServiceProvider.getInstance().getRepository().removeSpotFromFavorites(mSpotDetails.getSpotId());
         }
