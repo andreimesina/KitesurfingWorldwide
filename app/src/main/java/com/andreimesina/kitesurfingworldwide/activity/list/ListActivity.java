@@ -65,7 +65,6 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         /**
          * Authenticate
          */
-        
         viewModel.createProfile().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean changed) {
@@ -73,10 +72,8 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                     isAuthenticated = changed;
                     observeOnDataChanged();
                 }
-
             }
         });
-
     }
 
     @Override
@@ -89,13 +86,6 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         if(isAuthenticated) {
             onRefresh();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        Utils.setBoolean(this, "authenticated", false);
     }
 
     /**
@@ -122,7 +112,7 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 }
 
                 if(mSwipeRefreshLayout.isRefreshing()) {
-                    setRefreshingOff();
+                    setDelayedRefreshingOff();
                 }
             }
         });
@@ -148,7 +138,7 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         return super.onOptionsItemSelected(item);
     }
 
-    private void setRefreshingOff() {
+    private void setDelayedRefreshingOff() {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -160,6 +150,12 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        viewModel.syncSpots();
+        if(Utils.isNetworkConnected(this) == false) {
+            setDelayedRefreshingOff();
+        } else if(AuthenticationManager.getInstance().isOfflineAuth()) {
+            viewModel.createProfile();
+        } else {
+            viewModel.syncSpots();
+        }
     }
 }

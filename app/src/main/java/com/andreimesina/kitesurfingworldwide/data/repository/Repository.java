@@ -7,8 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.andreimesina.kitesurfingworldwide.core.AuthenticationManager;
-import com.andreimesina.kitesurfingworldwide.data.database.dao.SpotDao;
 import com.andreimesina.kitesurfingworldwide.data.database.Database;
+import com.andreimesina.kitesurfingworldwide.data.database.dao.SpotDao;
 import com.andreimesina.kitesurfingworldwide.data.model.Profile;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
 import com.andreimesina.kitesurfingworldwide.data.model.SpotDetails;
@@ -56,6 +56,12 @@ public class Repository {
     public MutableLiveData<Boolean> createProfile() {
         isAuthenticated = new MutableLiveData<>();
 
+        if(Utils.isNetworkConnected(app) == false) {
+            Toast.makeText(app, "You are offline. Check your connection", Toast.LENGTH_SHORT).show();
+            isAuthenticated.setValue(AuthenticationManager.getInstance().isOfflineAuth());
+            return isAuthenticated;
+        }
+
         webService.createProfile()
                 .enqueue(new Callback<ProfileResponse>() {
                     @Override
@@ -100,7 +106,9 @@ public class Repository {
     }
 
     public LiveData<List<Spot>> getAllSpots() {
-        syncSpots();
+        if(Utils.isNetworkConnected(app)) {
+            syncSpots();
+        }
 
         return getAllSpotsFromDb();
     }
@@ -109,6 +117,10 @@ public class Repository {
         if(spotsSyncedAt.isAfter(Instant.now().minus(3, ChronoUnit.SECONDS))) {
             Timber.d("Spots have been already synced in the last 3 seconds. Skipping...");
 //            Toast.makeText(app, "Last sync less than 3 secs ago", Toast.LENGTH_SHORT).show();
+            return ;
+        }
+
+        if(Utils.isNetworkConnected(app) == false) {
             return ;
         }
 
@@ -153,6 +165,10 @@ public class Repository {
     public LiveData<SpotDetails> getSpotDetails(String spotId) {
         LiveData<SpotDetails> spotDetails = getSpotDetailsFromDb(spotId);
 
+        if(Utils.isNetworkConnected(app) == false) {
+            return spotDetails;
+        }
+
         if(spotDetails.getValue() != null) {
             return spotDetails;
         } else {
@@ -182,6 +198,10 @@ public class Repository {
     }
 
     public void syncAllSpotDetails(List<Spot> spots) {
+        if(Utils.isNetworkConnected(app) == false) {
+            return ;
+        }
+
         for(Spot spot : spots) {
             syncSpotDetails(spot.getId());
         }

@@ -17,16 +17,17 @@ public class AuthenticationManager {
     private Profile profile;
 
     private boolean isAuthenticated;
+    private boolean isOfflineAuth;
 
     private AuthenticationManager(Context context) {
         mContext = context;
         // Hotfix solution until we have a registration layout
         // so we can get the email address from user input
         String email = Utils.getString(mContext, "email");
-        isAuthenticated = Utils.getBoolean(mContext, "authenticated");
+        isOfflineAuth = Utils.getBoolean(mContext, "authenticated");
 
         profile = new Profile();
-        if(isAuthenticated && email.length() > 0) {
+        if(isOfflineAuth && email.length() > 0) {
             profile.setEmail(email);
         } else {
             profile.setEmail("test@test.com");
@@ -50,6 +51,8 @@ public class AuthenticationManager {
     }
 
     public synchronized void setProfile(Profile profile) {
+        isAuthenticated = true;
+        isOfflineAuth = false;
         this.profile = profile;
     }
 
@@ -59,5 +62,13 @@ public class AuthenticationManager {
 
     public void setAuthenticated(boolean authenticated) {
         isAuthenticated = authenticated;
+    }
+
+    public boolean isOfflineAuth() {
+        return isOfflineAuth;
+    }
+
+    public void setOfflineAuth(boolean offlineAuth) {
+        isOfflineAuth = offlineAuth;
     }
 }
