@@ -13,6 +13,7 @@ import com.andreimesina.kitesurfingworldwide.data.model.Profile;
 import com.andreimesina.kitesurfingworldwide.data.model.Spot;
 import com.andreimesina.kitesurfingworldwide.data.model.SpotDetails;
 import com.andreimesina.kitesurfingworldwide.data.webservice.WebService;
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.CountriesResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.ProfileResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotDetailsResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotIdResponse;
@@ -209,6 +210,31 @@ public class Repository {
 
     private LiveData<SpotDetails> getSpotDetailsFromDb(String spotId) {
         return dao.getSpotDetails(spotId);
+    }
+
+    public MutableLiveData<List<String>> getAllSpotCountries() {
+        MutableLiveData<List<String>> countries = new MutableLiveData<>();
+
+        webService.getAllSpotCountries()
+                .enqueue(new Callback<CountriesResponse>() {
+                    @Override
+                    public void onResponse(Call<CountriesResponse> call, Response<CountriesResponse> response) {
+                        if (response.isSuccessful()) {
+                            countries.setValue(response.body().getCountries());
+                        } else {
+                            Toast.makeText(app, "Failed to fetch countries", Toast.LENGTH_SHORT).show();
+                            Timber.d("Failed to fetch countries");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CountriesResponse> call, Throwable t) {
+                        Toast.makeText(app, "Could not load countries", Toast.LENGTH_SHORT).show();
+                        Timber.d("Could not load countries");
+                    }
+                });
+
+        return countries;
     }
 
     public void addSpotToFavorites(String spotId) {

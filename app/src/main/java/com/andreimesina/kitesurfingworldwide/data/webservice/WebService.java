@@ -1,6 +1,7 @@
 package com.andreimesina.kitesurfingworldwide.data.webservice;
 
 import com.andreimesina.kitesurfingworldwide.core.AuthenticationManager;
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.CountriesResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotIdResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.ProfileResponse;
 import com.andreimesina.kitesurfingworldwide.data.model.SpotFilter;
@@ -62,7 +63,7 @@ public class WebService {
                 idMap);
     }
 
-    public Call<List<String>> getAllSpotCountries() {
+    public Call<CountriesResponse> getAllSpotCountries() {
         return api.getAllSpotCountries(
                 AuthenticationManager.getInstance().getProfile().getToken());
     }

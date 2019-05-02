@@ -1,5 +1,6 @@
 package com.andreimesina.kitesurfingworldwide.data.webservice;
 
+import com.andreimesina.kitesurfingworldwide.data.webservice.response.CountriesResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.SpotIdResponse;
 import com.andreimesina.kitesurfingworldwide.data.webservice.response.ProfileResponse;
 import com.andreimesina.kitesurfingworldwide.data.model.SpotFilter;
@@ -33,7 +34,7 @@ public interface ApiService {
 
     @Headers("Content-Type: application/json")
     @POST("/api-spot-get-countries")
-    Call<List<String>> getAllSpotCountries(@Header("token") String token);
+    Call<CountriesResponse> getAllSpotCountries(@Header("token") String token);
 
     @Headers("Content-Type: application/json")
     @POST("/api-spot-favorites-add")
