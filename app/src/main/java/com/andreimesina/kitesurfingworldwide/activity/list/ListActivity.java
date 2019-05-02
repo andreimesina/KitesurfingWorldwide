@@ -84,7 +84,7 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
          * Only calls refresh if user is already authenticated
          */
         if(isAuthenticated) {
-            onRefresh();
+            viewModel.syncSpots();
         }
     }
 
@@ -97,10 +97,6 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         viewModel.getSpots().observe(this, new Observer<List<Spot>>() {
             @Override
             public void onChanged(List<Spot> spots) {
-                if(mSwipeRefreshLayout.isRefreshing() == false) {
-                    mSwipeRefreshLayout.setRefreshing(true);
-                }
-
                 if(spots.size() > 0 && isAdapterInitiated == false) {
                     mAdapter = new SpotAdapter(ListActivity.this, spots);
                     mRecyclerView.setAdapter(mAdapter);
@@ -156,6 +152,7 @@ public class ListActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             viewModel.createProfile();
         } else {
             viewModel.syncSpots();
+            setDelayedRefreshingOff();
         }
     }
 }
